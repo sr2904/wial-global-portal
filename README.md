@@ -1,98 +1,222 @@
-GlobeWIAL — Global Portal
-Multi-Role Web Portal for the World Institute for Action Learning
-Live Demo: [Coming Soon] GitHub: https://github.com/sr2904/wial-global-portal Author: Shashwat Rao Balaji | Arizona State University | June 2026
+# GlobeWIAL — Global Portal
 
-What This Is
-GlobeWIAL is a fully interactive multi-role web portal built for WIAL (World Institute for Action Learning) — a global non-profit that certifies Action Learning coaches across 20+ countries.
+<div align="center">
 
-The portal serves 5 distinct user roles, each with a tailored dashboard, and includes a public-facing website, an AI-powered coach search, multilingual support, and a payments system — all in a single HTML/CSS/JS application with no backend required.
+**A fully interactive multi-role web portal for the World Institute for Action Learning**
 
-What It Does
-Public Website:
+[![GitHub](https://img.shields.io/badge/GitHub-sr2904%2Fwial--global--portal-blue?logo=github)](https://github.com/sr2904/wial-global-portal)
+![HTML](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white)
+![CSS](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)
 
-Hero section with WIAL stats and calls to action
-Coach directory with search, filter by country and certification level
-Certification information (CALC, PALC, SALC, MALC)
-Events calendar, resources library, client showcase, and contact form
-Member Portal (5 roles):
+*Built by Shashwat Rao Balaji · Arizona State University · June 2026*
 
-Super Admin — global oversight, badge approvals, template pushes to all 9 chapters, revenue by chapter, analytics dashboard
-Admin (Chapter Lead) — chapter site management, payment flow, email campaigns, event management, testimonials
-Content Creator — editable content for assigned chapter pages, testimonials, events
-Coach — coaching hours log, CE credit tracker, recertification application, job board, profile in directory
-Client / Organisation — AI coach search, global map, coach matching, enrolment flow
-AI Features:
+</div>
 
-Cross-lingual coach search — searches work in English, Portuguese, Spanish, French, and German
-AI scoring engine ranks coaches by skill match, location, certification level, and rating
-AI chat assistant for guided coach discovery
-Smart matching with evidence-based explanations ("why matched")
-Multilingual Support:
+---
 
-Full i18n for 5 languages: English, Portuguese, Spanish, French, German
-Auto-detects language based on user role and country
-Translate-to-English toggle for non-English pages
-Dashboard UI labels localised per language
-Accessibility:
+## What This Is
 
-Large text mode
-Colour blind friendly mode
-High contrast mode
-Keyboard navigation mode with visible focus rings
-Tech Stack
-Layer	Technology
-Language	HTML5, CSS3, Vanilla JavaScript
-Fonts	Inter (UI), Playfair Display (headings) via Google Fonts
-Maps	Custom SVG world map with interactive pins
-Charts	Pure CSS/SVG — donut chart, bar chart, payment funnel
-Payments	Stripe + PayPal flow (MVP demo)
-i18n	Custom JS translation engine with longest-match replacement
-Accessibility	CSS class-based a11y modes + ARIA attributes
-Deployment	Static HTML — deployable anywhere
-No frameworks. No build tools. No backend. Pure HTML, CSS, and JavaScript.
+GlobeWIAL is a fully interactive multi-role web portal for **WIAL (World Institute for Action Learning)** — a global non-profit that certifies Action Learning coaches across 20+ countries.
 
-Roles & Features
-Role	Key Features
-Super Admin	Badge approvals, template push to all chapters, global analytics, revenue by chapter
-Admin	Chapter site management, payment flow (UC4 dues system), email campaigns, events
-Content Creator	Page editing for assigned chapter, testimonials, events
-Coach	Hours log, CE credit tracker, recertification, job board, directory profile
-Client	AI coach search, global map, smart matching, enrolment flow
-Running Locally
-No setup required. Just open the file:
+The portal serves **5 distinct user roles**, each with a tailored dashboard. It includes a public-facing website, AI-powered coach search, multilingual support in 5 languages, and a payments system — all in a single HTML/CSS/JS application with no backend required.
 
+---
+
+## Architecture
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    wial-portal.html                     │
+│              (Public Site + Portal Shell)               │
+└────────────┬────────────────────────┬───────────────────┘
+             │                        │
+             ▼                        ▼
+┌────────────────────┐    ┌───────────────────────────────┐
+│   Public Website   │    │        Member Portal          │
+│                    │    │                               │
+│  • Hero Section    │    │  Role selected at login       │
+│  • Coach Directory │    │  → Dashboard renders          │
+│  • Certification   │    │    dynamically per role       │
+│  • Events          │    │                               │
+│  • Resources       │    │  Shared state via JS objects  │
+│  • Contact         │    │  No page reloads needed       │
+└────────────────────┘    └───────────────────────────────┘
+```
+
+---
+
+## The 5 Roles
+
+```
+Login → Select Role
+            │
+            ├──► 🔑 Super Admin
+            │         Global badge approvals
+            │         Template push to all 9 chapters
+            │         Revenue by chapter + analytics
+            │
+            ├──► 🏢 Admin (Chapter Lead)
+            │         Chapter site management
+            │         UC4 payment flow + dues tracking
+            │         Email campaigns + events
+            │
+            ├──► 📝 Content Creator
+            │         Edit assigned chapter pages
+            │         Manage testimonials + events
+            │
+            ├──► 🎓 Coach
+            │         Coaching hours log
+            │         CE credit tracker + recertification
+            │         Job board + directory profile
+            │
+            └──► 💼 Client / Organisation
+                      AI coach search (multilingual)
+                      Interactive global map
+                      Smart matching + enrolment flow
+```
+
+---
+
+## AI Coach Search Flow
+
+```
+User types query (any language)
+        │
+        ▼
+┌───────────────────────┐
+│   Language Normaliser │  "liderança Brasil" → "leadership brazil"
+│   (mlMap dictionary)  │  "führung" → "leadership"
+└──────────┬────────────┘
+           │
+           ▼
+┌───────────────────────┐
+│    AI Scoring Engine  │  Weights: skills (+30), location (+25),
+│    (aiSc function)    │  certification (+40), sector (+20), rating (+2×)
+└──────────┬────────────┘
+           │
+           ▼
+┌───────────────────────┐
+│   Ranked Results      │  Top matches with % score + "why matched" reason
+│   + Map Pin Update    │  Country pins update with match counts
+└───────────────────────┘
+```
+
+---
+
+## Multilingual Support
+
+```
+User logs in
+     │
+     ├── Role = Client  →  Uses prefLang (selected at login)
+     └── Role = Other   →  Uses CC[country].lang (auto from chapter)
+              │
+              ▼
+     curLocale() → "en" | "pt" | "es" | "fr" | "de"
+              │
+              ▼
+     applyTranslations()        ← Public site headings/buttons
+     localizeRenderedContent()  ← Dashboard labels via DOM tree walk
+              │
+              ▼
+     Translate bar appears for non-English pages
+     → One click to force English
+```
+
+---
+
+## Features at a Glance
+
+| Feature | Details |
+|---|---|
+| **Roles** | 5 roles, each with unique nav + dashboard |
+| **AI Search** | Cross-lingual scoring engine, no external API |
+| **Languages** | English, Portuguese, Spanish, French, German |
+| **Map** | Custom SVG world map, interactive country pins |
+| **Accessibility** | 4 modes: large text, colour blind, high contrast, keyboard |
+| **Payments** | Stripe + PayPal demo flow (UC4 dues system) |
+| **Charts** | Donut chart, bar chart, payment funnel — pure CSS/SVG |
+| **Certification** | CALC → PALC → SALC → MALC — full recertification flow |
+| **CE Tracker** | Credit logging, progress bar, deadline reminders |
+| **Job Board** | Coaching roles with certification requirements |
+| **Forums** | Member discussion threads with filters |
+| **Email** | Campaign templates with subscriber stats |
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Structure | HTML5 |
+| Styling | CSS3 — custom design system with CSS variables |
+| Logic | Vanilla JavaScript — zero dependencies |
+| Fonts | Inter + Playfair Display (Google Fonts) |
+| Maps | Custom SVG with JS-driven interactive pins |
+| Charts | Pure CSS/SVG — no chart libraries |
+| i18n | Custom JS translation engine |
+| Accessibility | CSS class injection + ARIA attributes |
+| Payments | Stripe + PayPal demo (no live checkout) |
+| Deployment | Static — runs in any browser, no server needed |
+
+**No frameworks. No build tools. No backend. No npm install.**
+
+---
+
+## Running Locally
+
+```bash
 # Clone the repo
 git clone https://github.com/sr2904/wial-global-portal.git
 cd wial-global-portal
 
-# Open in browser
+# Open in browser (Mac)
 open wial-portal.html
-Or simply drag wial-portal.html into any browser.
 
-How to Use the Portal
-Open wial-portal.html in a browser
-Click Portal Login → in the top right
-Select a role from the dropdown to explore that dashboard
-Each role shows a different set of features and navigation
-Recommended demo order:
+# Or just drag wial-portal.html into any browser
+```
 
-Start as Client — try the AI coach search and global map
-Switch to Coach — see the CE tracker and job board
-Switch to Admin — explore the payment flow and email campaigns
-Switch to Super Admin — see badge approvals and global analytics
-File Structure
+---
+
+## How to Demo
+
+1. Open `wial-portal.html` in a browser
+2. Click **Portal Login →** in the top right
+3. Select a role and click **Sign In to Dashboard**
+
+**Recommended demo order:**
+
+| Step | Role | What to show |
+|---|---|---|
+| 1 | Client | AI coach search — type "liderança Brasil" and watch it match |
+| 2 | Client | Click a country pin on the global map |
+| 3 | Coach | CE credit tracker + recertification modal |
+| 4 | Admin | Payment flow — UC4 dues system |
+| 5 | Super Admin | Badge approvals + push template to all chapters |
+
+---
+
+## File Structure
+
+```
 wial-global-portal/
-├── wial-portal.html     — full application structure (public site + portal)
-├── wial-portal.css      — design system, accessibility modes, responsive layout
-├── wial-portal.js       — all logic: roles, AI search, i18n, map, payments, dashboard
+├── wial-portal.html    — full app structure (public site + portal shell)
+├── wial-portal.css     — design system, a11y modes, responsive layout
+├── wial-portal.js      — all logic: roles, AI, i18n, map, payments
 └── README.md
-Key Design Decisions
-Single-file architecture — the entire portal runs from one HTML file with linked CSS and JS. No build step, no dependencies, deployable instantly to any static host.
+```
 
-Role-based rendering — instead of separate pages per role, the JS renders the correct dashboard dynamically based on login selection. Shared memory keeps state consistent.
+---
 
-AI without an API — the coach matching engine is a pure JS scoring function that weights skills, location, certification level, and ratings. It handles multilingual queries by mapping foreign-language terms to English equivalents before scoring.
+## Key Design Decisions
 
-Accessibility as a first-class feature — four a11y modes are toggleable at runtime via CSS class injection. No page reload needed.
+**Single-file architecture** — the entire portal runs from 3 linked files. No build step, no dependencies, deployable instantly to any static host including GitHub Pages.
 
-i18n without a library — translations are stored as plain JS objects and applied via a tree-walking DOM function. Longest-match replacement ensures phrases translate before individual words.
+**Role-based rendering** — instead of separate pages per role, JS renders the correct dashboard dynamically based on login selection. This keeps the codebase unified and state consistent.
+
+**AI without an API** — the coach matching engine is a pure JS scoring function. Multilingual queries are handled by mapping foreign-language terms to English before scoring — no external API call needed.
+
+**Accessibility as first-class** — four a11y modes are toggleable at runtime via CSS class injection with no page reload.
+
+**i18n without a library** — translations live in plain JS objects. A DOM tree-walking function applies them after every render, using longest-match replacement to handle phrases before individual words.
