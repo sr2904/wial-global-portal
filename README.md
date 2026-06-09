@@ -4,7 +4,7 @@
 
 **A fully interactive multi-role web portal for the World Institute for Action Learning**
 
-[![GitHub](https://img.shields.io/badge/GitHub-sr2904%2Fwial--global--portal-blue?logo=github)](https://github.com/sr2904/wial-global-portal)
+[![GitHub](https://img.shields.io/badge/GitHub-sr2904%2Fwial--global--portal-blue?logo=github)]([https://github.com/sr2904/wial-global-portal](https://2026-asu-wics-opportunity-hack.github.io/14-quadcoders/))
 ![HTML](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white)
 ![CSS](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)
